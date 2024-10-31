@@ -1,0 +1,32 @@
+services:
+  frontend:
+    build:
+      context: ./grafiles-frontend
+    container_name: grafiles-frontend
+    ports:
+      - "8080:80" 
+  
+  backend:
+    build:
+      context: ./grafiles-backend
+    container_name: grafiles-backend
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URL: mongodb://admin:123@mongo:27017/grafiles?authSource=admin
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo:latest
+    container_name: grafiles-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 123
+
+volumes:
+  mongo-data:
